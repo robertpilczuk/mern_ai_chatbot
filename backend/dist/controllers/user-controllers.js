@@ -42,6 +42,17 @@ export const userLogin = async (req, res, next) => {
             return res.status(403).send("Incorrect Password");
         }
         const token = createToken(user._id.toString(), user.email, "7d");
+        const expires = new Date();
+        expires.setDate(expires.getDate() + 7);
+        res.cookie("auth_token", token, {
+            path: "/",
+            domain: "localhost",
+            expires,
+            httpOnly: true,
+            signed: true
+        });
+        // TODO:
+        // jeśli chcę deploy zrobić zamieniam domain: "localhost" na moją domain
         return res.status(200).json({ message: "OK", id: user._id.toString() });
     }
     catch (error) {

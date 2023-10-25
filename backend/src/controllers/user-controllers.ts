@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js"
+import { todo } from "node:test";
 
 export const getAllUsers = async (
     req: Request,
@@ -58,7 +59,17 @@ export const userLogin = async (
         }
 
         const token = createToken(user._id.toString(), user.email, "7d");
-
+        const expires = new Date();
+        expires.setDate(expires.getDate() + 7);
+        res.cookie("auth_token", token, {
+            path: "/",
+            domain: "localhost",
+            expires,
+            httpOnly: true,
+            signed: true
+        });
+        // TODO:
+        // jeśli chcę deploy zrobić zamieniam domain: "localhost" na moją domain
         return res.status(200).json({ message: "OK", id: user._id.toString() });
     } catch (error) {
         console.log(error);

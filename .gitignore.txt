@@ -156,5 +156,5 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,node
 
-.backend/dist
-.backend/node_modules
+backend/dist
+backend/node_modules

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js"
-import { todo } from "node:test";
 import { COOKIE_NAME } from "../utils/constants.js";
 
 export const getAllUsers = async (
@@ -38,9 +37,9 @@ export const userSignup = async (
 
         //create token and store cookie
         res.clearCookie(COOKIE_NAME, {
-            httpOnly:true,
-            domain:"localhost",
-            signed:true,
+            httpOnly: true,
+            domain: "localhost",
+            signed: true,
             path: "/"
         });
 
@@ -80,9 +79,9 @@ export const userLogin = async (
         }
 
         res.clearCookie(COOKIE_NAME, {
-            httpOnly:true,
-            domain:"localhost",
-            signed:true,
+            httpOnly: true,
+            domain: "localhost",
+            signed: true,
             path: "/"
         });
 

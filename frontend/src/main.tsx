@@ -5,8 +5,8 @@ import './index.css'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.tsx'
-import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 
 //przechwyci dane z formularza i przekaze je na backend
 axios.defaults.baseURL = "http://localhost:5001/api/v1"

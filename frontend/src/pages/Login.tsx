@@ -16,10 +16,10 @@ const Login = () => {
         try {
             toast.loading("Signing In", { id: "login" });
             await auth?.login(email, password);
-            toast.success("Signing In Successfully", { id: "login" });
+            toast.success("Signed In Successfully", { id: "login" });
         } catch (error) {
             console.log(error);
-            toast.success("Signing In Failed", { id: "login" });
+            toast.error("Signing In Failed", { id: "login" });
         }
 
     }

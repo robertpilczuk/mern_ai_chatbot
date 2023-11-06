@@ -4,6 +4,15 @@ import React from "react";
 import CustomizedInput from "../components/shared/CustomizedInput";
 
 const Login = () => {
+    const handleSubmit = (event:React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const email = formData.get("email");
+        const password = formData.get("password");
+        console.log(email, password);
+        
+    }
+
     return <Box width={'100%'} height={'100%'} display="flex" flex={1}>
         <Box
             padding={8}
@@ -19,13 +28,15 @@ const Login = () => {
             padding={2}
             marginLeft={"auto"}
             marginTop={16}>
-            <form style={{
-                margin: 'auto',
-                padding: '30px',
-                boxShadow: "10px 10px  20px #000",
-                borderRadius: "10px",
-                border: "none",
-            }}
+            <form
+                onSubmit={(handleSubmit )}
+                style={{
+                    margin: 'auto',
+                    padding: '30px',
+                    boxShadow: "10px 10px  20px #000",
+                    borderRadius: "10px",
+                    border: "none",
+                }}
             >
                 <Box
                     sx={{
@@ -52,8 +63,8 @@ const Login = () => {
                                 color: "black",
                             }
                         }}
-                         endIcon={<IoIosLogIn/>}
-                        >Login</Button>
+                        endIcon={<IoIosLogIn />}
+                    >Login</Button>
                 </Box>
             </form>
         </Box>

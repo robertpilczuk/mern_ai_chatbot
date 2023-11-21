@@ -2,6 +2,27 @@ import { Avatar, Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
+import ChatItem from "../components/chat/ChatItem";
+
+const chatMessages = [
+    { "role": "user", "content": "Hello!" },
+    { "role": "assistant", "content": "Hi there! How can I assist you today?" },
+    { "role": "user", "content": "I need help with programming." },
+    { "role": "assistant", "content": "Sure, I'd be happy to help. What programming language are you working with?" },
+    { "role": "user", "content": "I'm using Python." },
+    { "role": "assistant", "content": "Great choice! What specific issue or question do you have about Python?" },
+    { "role": "user", "content": "I'm having trouble understanding loops." },
+    { "role": "assistant", "content": "No worries! Loops can be a bit tricky at first. What kind of loop are you struggling with - for, while, or something else?" },
+    { "role": "user", "content": "Hello!" },
+    { "role": "assistant", "content": "Hi there! How can I assist you today?" },
+    { "role": "user", "content": "I need help with programming." },
+    { "role": "assistant", "content": "Sure, I'd be happy to help. What programming language are you working with?" },
+    { "role": "user", "content": "I'm using Python." },
+    { "role": "assistant", "content": "Great choice! What specific issue or question do you have about Python?" },
+    { "role": "user", "content": "I'm having trouble understanding loops." },
+    { "role": "assistant", "content": "No worries! Loops can be a bit tricky at first. What kind of loop are you struggling with - for, while, or something else?" },
+]
+
 
 const Chat = () => {
     const auth = useAuth();
@@ -26,7 +47,7 @@ const Chat = () => {
                 sx={{
                     display: "flex",
                     width: "100%",
-                    height: "60vh",
+                    height: "60vh", 
                     bgcolor: "rgb(17,29,39)",
                     borderRadius: 5,
                     flexDirection: "column",
@@ -103,7 +124,12 @@ const Chat = () => {
                     overflowX: "hidden",
                     overflowY: "hidden",
                     scrollBehavior: "smooth",
-                }}></Box>
+                }}
+            >
+                {chatMessages.map((chat, index) => (
+                    <ChatItem content={chat.content} role={chat.role} key={index}/>
+                ))}
+            </Box>
         </Box>
     </Box>
     );

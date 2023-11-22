@@ -1,31 +1,32 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import React from "react";
+import { Avatar, Box, Button, Typography, IconButton } from "@mui/material";
+import React, { useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
 import ChatItem from "../components/chat/ChatItem";
+import { IoMdSend } from "react-icons/io";
+import { sendChatRequest } from "../helpers/api-communicator";
 
-const chatMessages = [
-    { "role": "user", "content": "Hello!" },
-    { "role": "assistant", "content": "Hi there! How can I assist you today?" },
-    { "role": "user", "content": "I need help with programming." },
-    { "role": "assistant", "content": "Sure, I'd be happy to help. What programming language are you working with?" },
-    { "role": "user", "content": "I'm using Python." },
-    { "role": "assistant", "content": "Great choice! What specific issue or question do you have about Python?" },
-    { "role": "user", "content": "I'm having trouble understanding loops." },
-    { "role": "assistant", "content": "No worries! Loops can be a bit tricky at first. What kind of loop are you struggling with - for, while, or something else?" },
-    { "role": "user", "content": "Hello!" },
-    { "role": "assistant", "content": "Hi there! How can I assist you today?" },
-    { "role": "user", "content": "I need help with programming." },
-    { "role": "assistant", "content": "Sure, I'd be happy to help. What programming language are you working with?" },
-    { "role": "user", "content": "I'm using Python." },
-    { "role": "assistant", "content": "Great choice! What specific issue or question do you have about Python?" },
-    { "role": "user", "content": "I'm having trouble understanding loops." },
-    { "role": "assistant", "content": "No worries! Loops can be a bit tricky at first. What kind of loop are you struggling with - for, while, or something else?" },
-]
-
+type Message = {
+    role: "user" | "assistant";
+    content: string;
+};
 
 const Chat = () => {
+
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const auth = useAuth();
+    const [chatMessages, setChatMessages] = useState<Message[]>([]);
+    const handleSubmit = async () => {
+        const content = inputRef.current?.value as string;
+        if (inputRef && inputRef.current) {
+            inputRef.current.value = "";
+        }
+        const newMessage: Message = { role: "user", content };
+        setChatMessages((prev) => [...prev, newMessage])
+        const chatData = await sendChatRequest(content);
+        setChatMessages([...chatData.chats]);
+        //
+    };
 
     return (<Box
         sx={{
@@ -47,7 +48,7 @@ const Chat = () => {
                 sx={{
                     display: "flex",
                     width: "100%",
-                    height: "60vh", 
+                    height: "60vh",
                     bgcolor: "rgb(17,29,39)",
                     borderRadius: 5,
                     flexDirection: "column",
@@ -110,6 +111,7 @@ const Chat = () => {
                     color: "white",
                     mb: 2,
                     mx: "auto",
+                    fontWeight: "600"
                 }}
             >Model - GPT 3.5 Turbo</Typography>
             <Box
@@ -122,14 +124,50 @@ const Chat = () => {
                     flexDirection: "column",
                     overflow: "scroll",
                     overflowX: "hidden",
-                    overflowY: "hidden",
+                    overflowY: "auto",
                     scrollBehavior: "smooth",
                 }}
             >
                 {chatMessages.map((chat, index) => (
-                    <ChatItem content={chat.content} role={chat.role} key={index}/>
+                    //@ts-ignore
+                    <ChatItem content={chat.content} role={chat.role} key={index} />
                 ))}
             </Box>
+            <div
+                style={{
+                    width: "100%",
+                    padding: "20px",
+                    borderRadius: 8,
+                    backgroundColor: "rgb(17,27,39)",
+                    display: "flex",
+                    margin: "auto"
+                }}
+            >
+                <input
+                    ref={inputRef}
+                    type="text"
+                    style={
+                        {
+                            width: "100%",
+                            backgroundColor: "transparent",
+                            padding: "10px",
+                            border: "none",
+                            outline: "none",
+                            color: "white",
+                            fontSize: "20px"
+                        }
+                    } />
+                <IconButton
+                    onClick={handleSubmit}
+                    sx={{
+                        ml: "auto",
+                        color: "white"
+                    }}
+                >
+                    <IoMdSend />
+                </IconButton>
+            </div>
+
         </Box>
     </Box>
     );

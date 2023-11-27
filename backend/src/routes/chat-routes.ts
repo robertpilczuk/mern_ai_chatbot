@@ -10,5 +10,9 @@ chatRoutes.post(
     validate(chatCompletionValidator),
     verifyToken,
     generateChatCompletion);
+chatRoutes.get(
+    "/all-chats",
+    verifyToken,
+    generateChatCompletion);
 
 export default chatRoutes;

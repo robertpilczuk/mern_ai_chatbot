@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
 import ChatItem from "../components/chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
-import { getUserChats, sendChatRequest } from "../helpers/api-communicator";
+import { deleteUserChats, getUserChats, sendChatRequest } from "../helpers/api-communicator";
 import toast from "react-hot-toast";
 
 type Message = {
@@ -28,6 +28,18 @@ const Chat = () => {
         setChatMessages((prev) => [...prev, newMessage]);
         const chatData = await sendChatRequest(content);
         setChatMessages([...chatData.chats]);
+    };
+
+    const handleDeleteChats = async () => {
+        try {
+            toast.loading("Delete Chats", { id: "deletechats" });
+            await deleteUserChats();
+            setChatMessages([]);
+            toast.success("Delete Chats Successfully", { id: "deletechats" });
+        } catch (error) {
+            console.log(error);
+            toast.error("Delete Chats Failed", { id: "deletechats" });
+        }
     };
 
     useLayoutEffect(() => {
@@ -100,7 +112,9 @@ const Chat = () => {
                     }}>
                     You can ask some questions related to Knowledge, Business, Advices, Education, etc. But avoid sharing personal information.
                 </Typography>
-                <Button sx={{
+                <Button
+                onClick={handleDeleteChats}
+                sx={{
                     width: "200px",
                     my: "auto",
                     color: "white",

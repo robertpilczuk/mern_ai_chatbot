@@ -1,6 +1,31 @@
 import { Avatar, Box, Typography } from '@mui/material';
 import React from 'react'
 import { useAuth } from '../../context/AuthContext';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+function extractCodeFromString(message: string) {
+    if (message.includes("```")) {
+        const blocks = message.split("```");
+        return blocks;
+    }
+}
+
+function isCodeBlock(str: string) {
+    if (
+        str.includes("=") ||
+        str.includes(";") ||
+        str.includes("[") ||
+        str.includes("]") ||
+        str.includes("{") ||
+        str.includes("}") ||
+        str.includes("#") ||
+        str.includes("//")
+    ) {
+        return true;
+    }
+    return false;
+}
 
 const ChatItem = ({
     content, role
@@ -8,6 +33,7 @@ const ChatItem = ({
     content: string,
     role: "user" | "assistant",
 }) => {
+    const messageBlock = extractCodeFromString(content);
     const auth = useAuth()
     return role === "assistant" ? (
         <Box
@@ -25,8 +51,25 @@ const ChatItem = ({
                 }}>
                 <img src='openai.png' alt='openai' width={"30px"} />
             </Avatar>
-            <Box><Typography fontSize={"20px"}>{content}</Typography> </Box>
-        </Box>
+            <Box>
+                {!messageBlock && <Typography sx={{ fontSize: "20px" }}>
+                    {content}
+                </Typography>}
+                {messageBlock &&
+                    messageBlock.length &&
+                    messageBlock.map((block) => isCodeBlock(block) ?
+                        (<SyntaxHighlighter style={coldarkDark} language='javascript'>
+                            {block}
+                        </SyntaxHighlighter>
+                        ) : (
+
+                            <Typography sx={{ fontSize: "20px" }}>
+                                {block}
+                            </Typography>
+                        )
+                    )}
+            </Box>
+        </Box >
     ) : (
         <Box
             sx={{

@@ -76,7 +76,8 @@ const ChatItem = ({
                 display: "flex",
                 p: 2,
                 bgcolor: "#004d56",
-                gap: 2
+                gap: 2,
+                my: 2
             }}
         >
             <Avatar
@@ -88,7 +89,24 @@ const ChatItem = ({
                 {auth?.user?.name[0]}
                 {auth?.user?.name.split(" ")[1][0]}
             </Avatar>
-            <Box><Typography fontSize={"20px"}>{content}</Typography> </Box>
+            <Box>
+                {!messageBlock && <Typography sx={{ fontSize: "20px" }}>
+                    {content}
+                </Typography>}
+                {messageBlock &&
+                    messageBlock.length &&
+                    messageBlock.map((block) => isCodeBlock(block) ?
+                        (<SyntaxHighlighter style={coldarkDark} language='javascript'>
+                            {block}
+                        </SyntaxHighlighter>
+                        ) : (
+
+                            <Typography sx={{ fontSize: "20px" }}>
+                                {block}
+                            </Typography>
+                        )
+                    )}
+            </Box>
         </Box>
     );
 }

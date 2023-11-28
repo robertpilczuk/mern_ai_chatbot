@@ -6,6 +6,7 @@ import ChatItem from "../components/chat/ChatItem";
 import { IoMdSend } from "react-icons/io";
 import { deleteUserChats, getUserChats, sendChatRequest } from "../helpers/api-communicator";
 import toast from "react-hot-toast";
+import { useNavigate } from 'react-router-dom'
 
 type Message = {
     role: "user" | "assistant";
@@ -14,6 +15,7 @@ type Message = {
 
 const Chat = () => {
 
+    const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const auth = useAuth();
     const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -54,8 +56,15 @@ const Chat = () => {
             }
             )
         }
+
+
     }, [auth]);
 
+    useEffect(() => {
+        if (!auth?.user) {
+            return navigate("/login");
+        }
+    }, [auth])
 
     return (<Box
         sx={{
@@ -113,19 +122,19 @@ const Chat = () => {
                     You can ask some questions related to Knowledge, Business, Advices, Education, etc. But avoid sharing personal information.
                 </Typography>
                 <Button
-                onClick={handleDeleteChats}
-                sx={{
-                    width: "200px",
-                    my: "auto",
-                    color: "white",
-                    fontWeight: "700",
-                    borderRadius: 3,
-                    mx: "auto",
-                    bgcolor: red[300],
-                    ":hover": {
-                        bgcolor: red.A400,
-                    },
-                }}
+                    onClick={handleDeleteChats}
+                    sx={{
+                        width: "200px",
+                        my: "auto",
+                        color: "white",
+                        fontWeight: "700",
+                        borderRadius: 3,
+                        mx: "auto",
+                        bgcolor: red[300],
+                        ":hover": {
+                            bgcolor: red.A400,
+                        },
+                    }}
                 >Clear Conversation</Button>
             </Box>
         </Box>

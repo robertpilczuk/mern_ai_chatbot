@@ -17,7 +17,7 @@ function App() {
     <main>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/f" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {auth?.isLoggedIn && auth.user && (
